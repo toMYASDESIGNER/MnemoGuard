@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070a16"/>
+      <stop offset="0.55" stop-color="#0c1022"/>
+      <stop offset="1" stop-color="#071923"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#37d7e7"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="9" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#49dbe9"/>
+    </marker>
+    <marker id="redArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#ff6078"/>
+    </marker>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 52px; font-weight: 800; fill: #f7f8ff; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 23px; font-weight: 400; fill: #9aa6bd; }
+      .section { font-family: Arial, sans-serif; font-size: 17px; font-weight: 800; letter-spacing: 3px; fill: #55e4ef; }
+      .nodeTitle { font-family: Arial, sans-serif; font-size: 26px; font-weight: 800; fill: #f7f8ff; }
+      .nodeText { font-family: Arial, sans-serif; font-size: 18px; font-weight: 400; fill: #aab5cb; }
+      .small { font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #d8deed; }
+      .pill { font-family: Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #94ffe0; }
+      .node { fill: #11182c; stroke: #283553; stroke-width: 2; }
+      .brandNode { fill: #11182c; stroke: url(#brand); stroke-width: 3; }
+      .trusted { fill: #0d2927; stroke: #43dba7; stroke-width: 2; }
+      .danger { fill: #2b1420; stroke: #ff6078; stroke-width: 2; }
+      .flow { fill: none; stroke: #49dbe9; stroke-width: 4; marker-end: url(#arrow); }
+      .dangerFlow { fill: none; stroke: #ff6078; stroke-width: 4; marker-end: url(#redArrow); }
+    </style>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <circle cx="1650" cy="165" r="260" fill="#0ca9bd" opacity="0.06"/>
+  <circle cx="240" cy="900" r="300" fill="#7149e8" opacity="0.07"/>
+
+  <g transform="translate(90 72)">
+    <path d="M0 11 L21 2 L42 11 V31 C42 51 30 67 21 72 C12 67 0 51 0 31 Z" fill="none" stroke="url(#brand)" stroke-width="4"/>
+    <circle cx="21" cy="31" r="8" fill="none" stroke="#55e4ef" stroke-width="3"/>
+    <path d="M21 39 V52" stroke="#55e4ef" stroke-width="3"/>
+    <text x="62" y="43" class="title">MnemoGuard Architecture</text>
+    <text x="63" y="78" class="subtitle">Zero-trust persistent memory on CockroachDB Cloud and AWS</text>
+  </g>
+
+  <text x="94" y="226" class="section">ENFORCED MEMORY PATH</text>
+
+  <g transform="translate(88 280)">
+    <rect class="node" width="260" height="190" rx="22"/>
+    <text x="28" y="48" class="nodeTitle">Candidate Memory</text>
+    <text x="28" y="84" class="nodeText">Chat • tool • import</text>
+    <text x="28" y="115" class="nodeText">Claim + provenance</text>
+    <rect x="28" y="139" width="172" height="30" rx="15" fill="#2b1420"/>
+    <text x="44" y="160" class="small" fill="#ff8aa0">UNTRUSTED INPUT</text>
+  </g>
+
+  <path class="flow" d="M348 375 H430"/>
+
+  <g transform="translate(440 280)">
+    <rect class="node" width="250" height="190" rx="22"/>
+    <text x="28" y="48" class="nodeTitle">AWS Lambda</text>
+    <text x="28" y="84" class="nodeText">Serverless intake</text>
+    <text x="28" y="115" class="nodeText">Independent of agent</text>
+    <rect x="28" y="139" width="148" height="30" rx="15" fill="#172a43"/>
+    <text x="46" y="160" class="small">FAIL-CLOSED</text>
+  </g>
+
+  <path class="flow" d="M690 375 H772"/>
+
+  <g transform="translate(782 250)" filter="url(#glow)">
+    <rect class="brandNode" width="360" height="250" rx="25"/>
+    <text x="32" y="50" class="nodeTitle">MnemoGuard Policy</text>
+    <text x="32" y="88" class="nodeText">- provenance + signature</text>
+    <text x="32" y="120" class="nodeText">- expiration + high impact</text>
+    <text x="32" y="152" class="nodeText">- vector contradiction</text>
+    <text x="32" y="184" class="nodeText">- deterministic decision</text>
+    <rect x="32" y="205" width="243" height="30" rx="15" fill="#16303a"/>
+    <text x="48" y="226" class="pill">POLICY IS AUTHORITATIVE</text>
+  </g>
+
+  <path class="flow" d="M1142 375 H1224"/>
+
+  <g transform="translate(1234 250)">
+    <rect class="brandNode" width="360" height="250" rx="25"/>
+    <text x="32" y="50" class="nodeTitle">CockroachDB Cloud</text>
+    <text x="32" y="88" class="nodeText">Persistent memory records</text>
+    <text x="32" y="120" class="nodeText">Distributed Vector Indexing</text>
+    <text x="32" y="152" class="nodeText">Serializable trust state</text>
+    <text x="32" y="184" class="nodeText">Append-only audit events</text>
+    <rect x="32" y="205" width="208" height="30" rx="15" fill="#16303a"/>
+    <text x="48" y="226" class="pill">DURABLE EVIDENCE</text>
+  </g>
+
+  <path class="flow" d="M1594 375 H1676"/>
+
+  <g transform="translate(1686 280)">
+    <rect class="trusted" width="150" height="190" rx="22"/>
+    <text x="24" y="48" class="nodeTitle">Agent</text>
+    <text x="24" y="84" class="nodeText">Reads only</text>
+    <text x="24" y="115" class="nodeText">trusted view</text>
+    <rect x="22" y="139" width="106" height="30" rx="15" fill="#173f36"/>
+    <text x="36" y="160" class="pill">SAFE RECALL</text>
+  </g>
+
+  <text x="94" y="592" class="section">SECURITY AND INTELLIGENCE BRANCHES</text>
+
+  <path class="dangerFlow" d="M962 500 V626 H620 V684"/>
+  <g transform="translate(430 694)">
+    <rect class="danger" width="380" height="190" rx="22"/>
+    <text x="30" y="50" class="nodeTitle">Quarantine + Review</text>
+    <text x="30" y="88" class="nodeText">Unsafe memory is retained</text>
+    <text x="30" y="120" class="nodeText">for evidence, never recall.</text>
+    <text x="30" y="158" class="small" fill="#ff9aac">Human approval is explicit</text>
+  </g>
+
+  <path class="flow" d="M962 500 V626 H1030 V684"/>
+  <g transform="translate(840 694)">
+    <rect class="node" width="380" height="190" rx="22"/>
+    <text x="30" y="50" class="nodeTitle">Amazon Bedrock</text>
+    <text x="30" y="88" class="nodeText">Constrained second opinion</text>
+    <text x="30" y="120" class="nodeText">for ambiguous high impact</text>
+    <text x="30" y="158" class="small">Cannot override quarantine</text>
+  </g>
+
+  <path class="flow" d="M1414 500 V626 H1440 V684"/>
+  <g transform="translate(1250 694)">
+    <rect class="trusted" width="380" height="190" rx="22"/>
+    <text x="30" y="50" class="nodeTitle">Cloud Managed MCP</text>
+    <text x="30" y="88" class="nodeText">Read-only identity exposes</text>
+    <text x="30" y="120" class="nodeText">trusted_agent_memory only</text>
+    <text x="30" y="158" class="pill">AUDITED AGENT ACCESS</text>
+  </g>
+
+  <rect x="88" y="958" width="1748" height="54" rx="27" fill="#11182c" stroke="#283553" stroke-width="2"/>
+  <text x="120" y="993" class="small">UNTRUSTED → AWS LAMBDA → POLICY → COCKROACHDB → TRUSTED VIEW → MCP → AGENT</text>
+  <text x="1318" y="993" class="small" fill="#55e4ef">Persistent • Auditable • Fail-closed</text>
+</svg>
