@@ -13,7 +13,8 @@
     "demo": "node scripts/demo.mjs",
     "test": "node --test",
     "check": "npm test && npm run demo",
-    "db:migrate": "node --env-file=.env scripts/migrate.mjs"
+    "db:migrate": "node --env-file=.env scripts/migrate.mjs",
+    "db:verify": "node --env-file=.env scripts/verify-cloud.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.862.0",
