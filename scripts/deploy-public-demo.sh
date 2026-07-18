@@ -68,11 +68,6 @@ else
 fi
 
 aws lambda wait function-active --function-name "$FUNCTION_NAME" --region "$REGION"
-aws lambda put-function-concurrency \
-  --function-name "$FUNCTION_NAME" \
-  --reserved-concurrent-executions 3 \
-  --region "$REGION" \
-  >/dev/null
 
 if ! aws lambda get-function-url-config --function-name "$FUNCTION_NAME" --region "$REGION" >/dev/null 2>&1; then
   aws lambda create-function-url-config \

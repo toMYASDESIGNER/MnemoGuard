@@ -81,7 +81,7 @@ web/      judge-facing live dashboard
 6. In AWS CloudShell, export `DATABASE_URL`, optionally set `AWS_DEPLOY_REGION` and `BEDROCK_MODEL_ID`, then run `bash scripts/deploy-lambda.sh`.
 7. Invoke `MnemoGuardMemoryFirewall` with a candidate memory. The function returns the decision and persists both the record and audit event to CockroachDB.
 
-For a judge-facing deployment, run `bash scripts/deploy-public-demo.sh`. It creates a separate `MnemoGuardPublicDemo` Lambda Function URL with reserved concurrency. Its allowlist serves only the dashboard, sanitized state, the fixed idempotent attack, and a view-only reset. Arbitrary memory ingestion, database reset, approval, and credential endpoints are not exposed.
+For a judge-facing deployment, run `bash scripts/deploy-public-demo.sh`. It creates a separate `MnemoGuardPublicDemo` Lambda Function URL. Its allowlist serves only the dashboard, sanitized state, the fixed idempotent attack, and a view-only reset. Arbitrary memory ingestion, database reset, approval, and credential endpoints are not exposed.
 
 The current AWS account exposes Amazon Nova Lite through Bedrock, but its non-adjustable daily token quota is `0`. The deployed Lambda therefore demonstrates the production-safe fallback path until AWS enables inference quota for the account; the code, IAM permission, model ID, and Bedrock invocation path are already configured.
 
