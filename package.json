@@ -1,0 +1,22 @@
+{
+  "name": "mnemoguard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A zero-trust firewall for AI agent memory, built with CockroachDB and AWS.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "demo": "node scripts/demo.mjs",
+    "test": "node --test",
+    "check": "npm test && npm run demo",
+    "db:migrate": "node scripts/migrate.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.862.0",
+    "pg": "^8.16.3"
+  },
+  "license": "MIT"
+}

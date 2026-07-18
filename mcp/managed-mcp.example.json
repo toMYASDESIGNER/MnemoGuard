@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mnemoguard-trusted-memory": {
+      "url": "PASTE_COCKROACHDB_CLOUD_MANAGED_MCP_URL_HERE",
+      "description": "Read-only access. Agents query trusted_agent_memory; quarantined rows are never exposed."
+    }
+  }
+}
