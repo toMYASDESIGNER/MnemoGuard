@@ -72,10 +72,12 @@ web/      judge-facing live dashboard
 ## Cloud setup
 
 1. Create a CockroachDB Cloud cluster on AWS.
-2. Enable vector indexes and run `npm run db:migrate` with `DATABASE_URL` set.
-3. Generate the Managed MCP endpoint in CockroachDB Cloud and give its read-only identity access to `trusted_agent_memory`.
-4. Configure AWS credentials, `AWS_REGION`, and `BEDROCK_MODEL_ID`.
-5. Package `src/aws/lambda.mjs` as the Lambda handler or deploy the Node server to an AWS container service.
+2. Copy the General connection string into the ignored `.env` file as `DATABASE_URL`. Never commit or paste it into an issue or chat.
+3. Enable vector indexes and run `npm run db:migrate`.
+4. Start the connected dashboard with `npm run start:cloud`.
+5. Generate the Managed MCP endpoint in CockroachDB Cloud and give its read-only identity access to `trusted_agent_memory`.
+6. Configure AWS credentials, `AWS_REGION`, and `BEDROCK_MODEL_ID`.
+7. Package `src/aws/lambda.mjs` as the Lambda handler or deploy the Node server to an AWS container service.
 
 No secrets belong in Git. Local mode is the default whenever cloud environment variables are absent.
 

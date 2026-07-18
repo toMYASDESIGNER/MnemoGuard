@@ -9,10 +9,11 @@
   },
   "scripts": {
     "start": "node src/server.mjs",
+    "start:cloud": "node --env-file=.env src/server.mjs",
     "demo": "node scripts/demo.mjs",
     "test": "node --test",
     "check": "npm test && npm run demo",
-    "db:migrate": "node scripts/migrate.mjs"
+    "db:migrate": "node --env-file=.env scripts/migrate.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.862.0",
