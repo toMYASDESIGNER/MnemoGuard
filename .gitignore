@@ -9,3 +9,8 @@ npm-debug.log*
 *.pem
 *.key
 *.crt
+submission/.video-build-*/
+submission/*.mp4
+submission/video-assets/contact-sheet.png
+submission/video-assets/validation-*.png
+submission/video-assets/validation-video.png

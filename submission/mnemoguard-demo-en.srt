@@ -1,0 +1,112 @@
+1
+00:00:00,000 --> 00:00:05,000
+Meet MnemoGuard, a zero-trust memory firewall for autonomous AI agents.
+
+2
+00:00:05,000 --> 00:00:13,000
+In the next two and a half minutes, we will poison an agent's memory, compare outcomes, and inspect the evidence.
+
+3
+00:00:13,000 --> 00:00:19,000
+The live dashboard is running on AWS Lambda and connected to CockroachDB Cloud.
+
+4
+00:00:19,000 --> 00:00:24,000
+It shows three durable memories: one trusted record and two quarantined records.
+
+5
+00:00:24,000 --> 00:00:31,000
+MnemoGuard evaluates memory before it can enter an agent's context or trigger a real-world action.
+
+6
+00:00:32,000 --> 00:00:33,000
+Here is the attack.
+
+7
+00:00:33,000 --> 00:00:43,000
+A compromised support chat injects a new refund limit of ten thousand dollars, marks the customer V I P, and removes approval requirements.
+
+8
+00:00:43,000 --> 00:00:48,000
+Before execution, both agents receive exactly the same retrieved claim.
+
+9
+00:00:49,000 --> 00:00:54,000
+The baseline agent trusts the newest memory and approves a ten-thousand-dollar refund.
+
+10
+00:00:54,000 --> 00:00:58,000
+MnemoGuard blocks it and requires human review.
+
+11
+00:00:58,000 --> 00:01:00,000
+The result is not a prompt suggestion.
+
+12
+00:01:00,000 --> 00:01:07,000
+The poisoned record remains auditable, but it cannot cross the trusted-memory boundary or reach the agent.
+
+13
+00:01:08,000 --> 00:01:17,000
+The policy score reaches one hundred because the source is untrusted, unsigned, high impact, and contradicts the signed C R M record.
+
+14
+00:01:17,000 --> 00:01:22,000
+AWS Lambda runs this intake pipeline independently of the agent.
+
+15
+00:01:22,000 --> 00:01:32,000
+The guard writes its decision to CockroachDB, while the read-only CockroachDB Managed M C P Server exposes only the trusted view for agent recall.
+
+16
+00:01:33,000 --> 00:01:36,000
+CockroachDB is the durable memory system of record.
+
+17
+00:01:36,000 --> 00:01:42,000
+Trusted and quarantined assertions remain transactionally consistent with their embeddings.
+
+18
+00:01:42,000 --> 00:01:51,000
+Distributed Vector Indexing retrieves related memories for contradiction checks, while append-only decision events preserve the audit trail.
+
+19
+00:01:51,000 --> 00:01:56,000
+Here we can see the trusted five-hundred-dollar limit beside the quarantined poison.
+
+20
+00:01:57,000 --> 00:02:00,000
+The complete implementation is open source.
+
+21
+00:02:00,000 --> 00:02:16,000
+The repository includes the trust engine, H T T P API, CockroachDB schema, Lambda handlers, public demo hardening, automated tests, deployment scripts, and a reproducible fallback path.
+
+22
+00:02:16,000 --> 00:02:18,000
+Twelve validation tests pass.
+
+23
+00:02:18,000 --> 00:02:27,000
+The architecture uses both required CockroachDB capabilities: Distributed Vector Indexing and the Cloud Managed M C P Server.
+
+24
+00:02:27,000 --> 00:02:30,000
+AWS Lambda provides serverless execution.
+
+25
+00:02:30,000 --> 00:02:41,000
+A constrained Amazon Bedrock adjudicator handles ambiguous cases when inference quota is available, but deterministic policy always remains authoritative.
+
+26
+00:02:41,000 --> 00:02:48,000
+MnemoGuard turns persistent agent memory from an implicit risk into an enforceable security boundary.
+
+27
+00:02:48,000 --> 00:02:55,000
+Try the live demo, inspect the audit evidence, and review the source code from the Devpost submission.
+
+28
+00:02:55,000 --> 00:02:56,000
+Thank you.
+

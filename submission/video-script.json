@@ -1,0 +1,38 @@
+[
+  {
+    "image": "submission/mnemoguard-devpost-thumbnail.png",
+    "narration": "Meet MnemoGuard, a zero-trust memory firewall for autonomous AI agents. In the next two and a half minutes, we will poison an agent's memory, compare outcomes, and inspect the evidence."
+  },
+  {
+    "image": "submission/video-assets/01-home.png",
+    "narration": "The live dashboard is running on AWS Lambda and connected to CockroachDB Cloud. It shows three durable memories: one trusted record and two quarantined records. MnemoGuard evaluates memory before it can enter an agent's context or trigger a real-world action."
+  },
+  {
+    "image": "submission/video-assets/02-attack-ready.png",
+    "narration": "Here is the attack. A compromised support chat injects a new refund limit of ten thousand dollars, marks the customer V I P, and removes approval requirements. Before execution, both agents receive exactly the same retrieved claim."
+  },
+  {
+    "image": "submission/video-assets/03-attack-result.png",
+    "narration": "The baseline agent trusts the newest memory and approves a ten-thousand-dollar refund. MnemoGuard blocks it and requires human review. The result is not a prompt suggestion. The poisoned record remains auditable, but it cannot cross the trusted-memory boundary or reach the agent."
+  },
+  {
+    "image": "submission/video-assets/04-policy-architecture.png",
+    "narration": "The policy score reaches one hundred because the source is untrusted, unsigned, high impact, and contradicts the signed C R M record. AWS Lambda runs this intake pipeline independently of the agent. The guard writes its decision to CockroachDB, while the read-only CockroachDB Managed M C P Server exposes only the trusted view for agent recall."
+  },
+  {
+    "image": "submission/video-assets/05-ledger.png",
+    "narration": "CockroachDB is the durable memory system of record. Trusted and quarantined assertions remain transactionally consistent with their embeddings. Distributed Vector Indexing retrieves related memories for contradiction checks, while append-only decision events preserve the audit trail. Here we can see the trusted five-hundred-dollar limit beside the quarantined poison."
+  },
+  {
+    "image": "submission/video-assets/06-github.png",
+    "narration": "The complete implementation is open source. The repository includes the trust engine, H T T P API, CockroachDB schema, Lambda handlers, public demo hardening, automated tests, deployment scripts, and a reproducible fallback path. Twelve validation tests pass."
+  },
+  {
+    "image": "submission/video-assets/07-readme.png",
+    "narration": "The architecture uses both required CockroachDB capabilities: Distributed Vector Indexing and the Cloud Managed M C P Server. AWS Lambda provides serverless execution. A constrained Amazon Bedrock adjudicator handles ambiguous cases when inference quota is available, but deterministic policy always remains authoritative."
+  },
+  {
+    "image": "submission/mnemoguard-devpost-thumbnail.png",
+    "narration": "MnemoGuard turns persistent agent memory from an implicit risk into an enforceable security boundary. Try the live demo, inspect the audit evidence, and review the source code from the Devpost submission. Thank you."
+  }
+]

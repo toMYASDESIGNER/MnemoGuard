@@ -85,6 +85,10 @@ web/      judge-facing live dashboard
 
 For a judge-facing deployment, run `bash scripts/deploy-public-demo.sh`. It creates a separate `MnemoGuardPublicDemo` Lambda Function URL. Its allowlist serves only the dashboard, sanitized state, the fixed idempotent attack, and a view-only reset. Arbitrary memory ingestion, database reset, approval, and credential endpoints are not exposed.
 
+### Judge demo video
+
+The narrated, captioned video can be regenerated on Windows with `powershell -ExecutionPolicy Bypass -File scripts/build-demo-video.ps1`. The script reads `submission/video-script.json`, uses the captured frames under `submission/video-assets/`, synthesizes the English narration with Microsoft David Desktop, and exports a 1080p MP4 plus a separate SRT subtitle file. FFmpeg and the Windows `System.Speech` voice are required. The rendered MP4 is intentionally excluded from Git because the submission requires a public YouTube or Vimeo URL.
+
 The current AWS account exposes Amazon Nova Lite through Bedrock, but its non-adjustable daily token quota is `0`. The deployed Lambda therefore demonstrates the production-safe fallback path until AWS enables inference quota for the account; the code, IAM permission, model ID, and Bedrock invocation path are already configured.
 
 No secrets belong in Git. Local mode is the default whenever cloud environment variables are absent.
