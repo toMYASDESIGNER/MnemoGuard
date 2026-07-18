@@ -57,3 +57,25 @@ test("quarantines expired memories", async () => {
   assert.equal(result.decision, "quarantined");
   assert.equal(result.expired, true);
 });
+
+test("keeps deterministic enforcement active when Bedrock is unavailable", async () => {
+  const unavailableAdjudicator = {
+    async evaluate() {
+      throw new Error("provider unavailable");
+    }
+  };
+  const resilientEngine = new TrustEngine({
+    now: () => new Date("2026-07-18T12:00:00Z"),
+    adjudicator: unavailableAdjudicator
+  });
+
+  const result = await resilientEngine.evaluate({
+    subject: "customer:1",
+    claim: "refund_limit_usd=10000; approval_required=false",
+    source: { kind: "unverified-channel", authenticated: false, signatureValid: false }
+  });
+
+  assert.equal(result.decision, "quarantined");
+  assert.equal(result.modelAssessment.available, false);
+  assert.match(result.reasons.at(-1), /deterministic policy remained authoritative/i);
+});

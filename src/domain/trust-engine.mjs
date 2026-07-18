@@ -99,11 +99,20 @@ export class TrustEngine {
 
     let modelAssessment = null;
     if (this.adjudicator && (conflicts.length > 0 || highRisk)) {
-      modelAssessment = await this.adjudicator.evaluate({ candidate, conflicts, trustedMemories });
-      if (modelAssessment?.riskAdjustment) {
-        riskScore += clamp(Number(modelAssessment.riskAdjustment), -10, 10);
+      try {
+        modelAssessment = await this.adjudicator.evaluate({ candidate, conflicts, trustedMemories });
+        if (modelAssessment?.riskAdjustment) {
+          riskScore += clamp(Number(modelAssessment.riskAdjustment), -10, 10);
+        }
+        if (modelAssessment?.summary) reasons.push(`Bedrock: ${modelAssessment.summary}`);
+      } catch {
+        modelAssessment = {
+          riskAdjustment: 0,
+          summary: "Unavailable; deterministic policy remained authoritative.",
+          available: false
+        };
+        reasons.push(`Bedrock: ${modelAssessment.summary}`);
       }
-      if (modelAssessment?.summary) reasons.push(`Bedrock: ${modelAssessment.summary}`);
     }
 
     riskScore = clamp(riskScore, 0, 100);

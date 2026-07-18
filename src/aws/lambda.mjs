@@ -7,9 +7,12 @@ let service;
 
 function getService() {
   if (!service) {
+    const adjudicator = process.env.BEDROCK_MODEL_ID
+      ? new BedrockAdjudicator()
+      : null;
     service = new MnemoGuardService({
       store: new CockroachMemoryStore(),
-      engine: new TrustEngine({ adjudicator: new BedrockAdjudicator() })
+      engine: new TrustEngine({ adjudicator })
     });
   }
   return service;
