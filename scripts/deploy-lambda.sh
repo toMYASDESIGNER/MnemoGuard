@@ -43,6 +43,7 @@ aws iam put-role-policy \
   --policy-name MnemoGuardBedrockInvoke \
   --policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["bedrock:InvokeModel"],"Resource":"*"}]}'
 
+: > "$ENV_FILE"
 chmod 600 "$ENV_FILE"
 jq -n \
   --arg databaseUrl "$DATABASE_URL" \

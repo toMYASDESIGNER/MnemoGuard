@@ -27,6 +27,7 @@ trap cleanup EXIT
 npm install --omit=dev
 zip -rq "$PACKAGE_FILE" src web node_modules package.json
 
+: > "$ENV_FILE"
 chmod 600 "$ENV_FILE"
 jq -n \
   --arg databaseUrl "$DATABASE_URL" \
