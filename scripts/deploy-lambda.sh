@@ -9,16 +9,18 @@ ROLE_NAME="${ROLE_NAME:-MnemoGuardLambdaRole}"
 MODEL_ID="${BEDROCK_MODEL_ID:-amazon.nova-lite-v1:0}"
 ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 ROLE_ARN="arn:aws:iam::${ACCOUNT_ID}:role/${ROLE_NAME}"
-PACKAGE_FILE="$(mktemp --suffix=.zip)"
-ENV_FILE="$(mktemp)"
+TEMP_DIR="$(mktemp -d)"
+PACKAGE_FILE="$TEMP_DIR/function.zip"
+ENV_FILE="$TEMP_DIR/environment.json"
 
 cleanup() {
   rm -f "$PACKAGE_FILE"
-  if command -v shred >/dev/null 2>&1; then
+  if [[ -f "$ENV_FILE" ]] && command -v shred >/dev/null 2>&1; then
     shred -u "$ENV_FILE"
   else
     rm -f "$ENV_FILE"
   fi
+  rmdir "$TEMP_DIR"
 }
 trap cleanup EXIT
 
