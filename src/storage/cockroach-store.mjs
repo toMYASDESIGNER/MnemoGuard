@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import { createHash, randomUUID } from "node:crypto";
 import { vectorLiteral } from "../domain/embedding.mjs";
 
 function normalizeRow(row) {
@@ -33,7 +34,21 @@ export class CockroachMemoryStore {
   }
 
   async reset() {
-    await this.pool.query("TRUNCATE memory_events, memory_records");
+    if (process.env.ALLOW_DEMO_RESET !== "true") {
+      throw new Error("Cloud reset is disabled. Set ALLOW_DEMO_RESET=true only in an isolated demo environment.");
+    }
+    const client = await this.pool.connect();
+    try {
+      await client.query("BEGIN");
+      await client.query("TRUNCATE memory_events, memory_records");
+      await client.query("UPDATE memory_event_heads SET head_hash = 'GENESIS', version = 0 WHERE stream = 'global'");
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK").catch(() => {});
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 
   async addMemory(record) {
@@ -89,11 +104,53 @@ export class CockroachMemoryStore {
   }
 
   async appendEvent(type, payload) {
-    const result = await this.pool.query(
-      "SELECT append_memory_event($1, $2::JSONB) AS event",
-      [type, JSON.stringify(payload)]
-    );
-    return result.rows[0].event;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const client = await this.pool.connect();
+      try {
+        await client.query("BEGIN");
+        const headResult = await client.query(
+          "SELECT head_hash, version FROM memory_event_heads WHERE stream = 'global'"
+        );
+        const head = headResult.rows[0];
+        const event = {
+          id: randomUUID(),
+          type,
+          payload,
+          createdAt: new Date().toISOString(),
+          previousHash: head.head_hash
+        };
+        event.hash = createHash("sha256")
+          .update(event.previousHash)
+          .update(JSON.stringify(event))
+          .digest("hex");
+
+        await client.query(
+          `INSERT INTO memory_events
+            (id, event_type, payload, previous_hash, hash, created_at)
+           VALUES ($1, $2, $3::JSONB, $4, $5, $6)`,
+          [event.id, event.type, JSON.stringify(event.payload), event.previousHash, event.hash, event.createdAt]
+        );
+        const updated = await client.query(
+          `UPDATE memory_event_heads
+           SET head_hash = $1, version = version + 1
+           WHERE stream = 'global' AND version = $2`,
+          [event.hash, head.version]
+        );
+        if (updated.rowCount !== 1) {
+          const conflict = new Error("Concurrent audit append detected");
+          conflict.code = "40001";
+          throw conflict;
+        }
+        await client.query("COMMIT");
+        return event;
+      } catch (error) {
+        await client.query("ROLLBACK").catch(() => {});
+        if (error.code !== "40001" || attempt === 4) throw error;
+      } finally {
+        client.release();
+      }
+    }
+    throw new Error("Could not append audit event after retries.");
   }
 
   async listEvents() {

@@ -13,6 +13,9 @@ test("attack demo shows baseline execution and protected blocking", async () => 
   assert.equal(state.counts.trusted, 1);
   assert.equal(state.counts.quarantined, 1);
   assert.equal(state.events.length, 3);
+  assert.equal(state.events[0].previousHash, state.events[1].hash);
+  assert.equal(state.events[1].previousHash, state.events[2].hash);
+  assert.equal(state.events[2].previousHash, "GENESIS");
 });
 
 test("a human can promote a quarantined record after review", async () => {

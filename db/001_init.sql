@@ -30,35 +30,19 @@ CREATE TABLE IF NOT EXISTS memory_events (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS memory_event_heads (
+  stream STRING PRIMARY KEY,
+  head_hash STRING NOT NULL,
+  version INT NOT NULL
+);
+
+UPSERT INTO memory_event_heads (stream, head_hash, version)
+VALUES ('global', 'GENESIS', 0);
+
 CREATE VIEW IF NOT EXISTS trusted_agent_memory AS
 SELECT *
 FROM memory_records
 WHERE trust_state = 'trusted'
   AND (expires_at IS NULL OR expires_at > now());
-
-CREATE OR REPLACE FUNCTION append_memory_event(p_event_type STRING, p_payload JSONB)
-RETURNS JSONB
-LANGUAGE SQL
-AS $$
-  WITH previous AS (
-    SELECT COALESCE((SELECT hash FROM memory_events ORDER BY created_at DESC LIMIT 1), 'GENESIS') AS value
-  ), inserted AS (
-    INSERT INTO memory_events (event_type, payload, previous_hash, hash)
-    SELECT p_event_type,
-           p_payload,
-           previous.value,
-           encode(sha256((previous.value || p_event_type || p_payload::STRING)::BYTES), 'hex')
-    FROM previous
-    RETURNING *
-  )
-  SELECT jsonb_build_object(
-    'id', id,
-    'type', event_type,
-    'payload', payload,
-    'previousHash', previous_hash,
-    'hash', hash,
-    'createdAt', created_at
-  ) FROM inserted;
-$$;
 
 GRANT SELECT ON trusted_agent_memory TO public;

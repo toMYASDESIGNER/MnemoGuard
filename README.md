@@ -51,7 +51,7 @@ flowchart LR
 
 - **Distributed Vector Indexing** finds related records and assertion-level contradictions while relational policy fields remain transactionally consistent with their embeddings.
 - **Cloud Managed MCP Server** is the read-only boundary used by agents. It exposes `trusted_agent_memory`; quarantined records never enter an agent's context.
-- CockroachDB stores trusted, review, and quarantined states plus the append-only decision history as the durable system of record.
+- CockroachDB stores trusted, review, and quarantined states plus the append-only decision history as the durable system of record. A serializable compare-and-swap head prevents concurrent agents from forking or silently overwriting the audit chain.
 
 ### AWS
 
