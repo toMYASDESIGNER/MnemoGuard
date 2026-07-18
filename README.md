@@ -57,6 +57,8 @@ flowchart LR
 
 - **AWS Lambda** runs the memory-ingestion and policy pipeline independently of any agent process.
 - **Amazon Bedrock** provides a constrained second opinion for ambiguous, high-impact or contradictory memories. Deterministic checks remain authoritative and the local demo works without model access.
+- The verified deployment uses `MnemoGuardMemoryFirewall` on the AWS Lambda Node.js 22 runtime in `eu-north-1`. A real invocation quarantined an unsigned high-impact memory with risk `75` and persisted it to CockroachDB Cloud.
+- Bedrock failures never become an authorization bypass. If inference is throttled or unavailable, MnemoGuard records that condition and continues with the deterministic zero-trust verdict.
 
 ## Repository map
 
@@ -76,8 +78,10 @@ web/      judge-facing live dashboard
 3. Enable vector indexes and run `npm run db:migrate`.
 4. Start the connected dashboard with `npm run start:cloud`.
 5. Generate the Managed MCP endpoint in CockroachDB Cloud and give its read-only identity access to `trusted_agent_memory`.
-6. Configure AWS credentials, `AWS_REGION`, and `BEDROCK_MODEL_ID`.
-7. Package `src/aws/lambda.mjs` as the Lambda handler or deploy the Node server to an AWS container service.
+6. In AWS CloudShell, export `DATABASE_URL`, optionally set `AWS_DEPLOY_REGION` and `BEDROCK_MODEL_ID`, then run `bash scripts/deploy-lambda.sh`.
+7. Invoke `MnemoGuardMemoryFirewall` with a candidate memory. The function returns the decision and persists both the record and audit event to CockroachDB.
+
+The current AWS account exposes Amazon Nova Lite through Bedrock, but its non-adjustable daily token quota is `0`. The deployed Lambda therefore demonstrates the production-safe fallback path until AWS enables inference quota for the account; the code, IAM permission, model ID, and Bedrock invocation path are already configured.
 
 No secrets belong in Git. Local mode is the default whenever cloud environment variables are absent.
 
